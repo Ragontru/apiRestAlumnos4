@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, ToastController } from '@ionic/angular';
 import { ApiServiceProvider } from 'src/providers/api-service/api-service';
 import { EditarAlumnoPage } from '../editar-alumno/editar-alumno.page';
 import { Alumno } from '../modelo/Alumno';
+// import { Storage } from '@ionic/storage'
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -14,7 +16,9 @@ export class HomePage implements OnInit {
 
   constructor(private apiService: ApiServiceProvider,
     public alertController: AlertController,
-    public modalController: ModalController) {
+    public modalController: ModalController,
+    // private storage: Storage,
+    public toastController: ToastController) {
   }
 
   ngOnInit(): void {
@@ -150,6 +154,42 @@ export class HomePage implements OnInit {
     });
 
     return await modal.present();
+  }
+
+
+  async nuevoAlumno() {
+    const modal = await this.modalController.create({
+      component: EditarAlumnoPage,
+      componentProps: {
+        'alumnoJson': JSON.stringify(new Alumno(-1,"", "", "", "", "", "", "", ""))
+      }
+    });
+
+    modal.onDidDismiss().then((data) => {
+      if (data['data'] != null) {
+        let alumnoJSON = JSON.parse(data['data']);
+        let alumnoNuevo: Alumno = Alumno.createFromJsonObject(alumnoJSON);
+        this.apiService.insertarAlumno(alumnoNuevo)  //se hace POST a la API
+          .then((alumno: Alumno) => {
+            this.alumnos.push(alumno);  //si se ha insertado en la api se añade en la lista
+          })
+          .catch((error: string) => {
+            this.presentToast("Error al insertar: " + error);
+          });
+      }
+    });
+
+    return await modal.present();
+  }
+
+
+  async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000
+    });
+    toast.present();
+
   }
 
 }
