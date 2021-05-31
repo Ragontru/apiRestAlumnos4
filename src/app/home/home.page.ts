@@ -3,7 +3,6 @@ import { AlertController, ModalController, ToastController } from '@ionic/angula
 import { ApiServiceProvider } from 'src/providers/api-service/api-service';
 import { EditarAlumnoPage } from '../editar-alumno/editar-alumno.page';
 import { Alumno } from '../modelo/Alumno';
-// import { Storage } from '@ionic/storage'
 
 @Component({
   selector: 'app-home',
@@ -17,7 +16,6 @@ export class HomePage implements OnInit {
   constructor(private apiService: ApiServiceProvider,
     public alertController: AlertController,
     public modalController: ModalController,
-    // private storage: Storage,
     public toastController: ToastController) {
   }
 
@@ -156,12 +154,12 @@ export class HomePage implements OnInit {
     return await modal.present();
   }
 
-
   async nuevoAlumno() {
     const modal = await this.modalController.create({
       component: EditarAlumnoPage,
       componentProps: {
-        'alumnoJson': JSON.stringify(new Alumno(-1,"", "", "", "", "", "", "", ""))
+        'alumnoJson': JSON.stringify(new Alumno(-1,
+          "", "", "", "", "", "", "", ""))
       }
     });
 
@@ -178,10 +176,8 @@ export class HomePage implements OnInit {
           });
       }
     });
-
     return await modal.present();
   }
-
 
   async presentToast(message: string) {
     const toast = await this.toastController.create({
@@ -189,7 +185,6 @@ export class HomePage implements OnInit {
       duration: 2000
     });
     toast.present();
-
   }
 
 }
