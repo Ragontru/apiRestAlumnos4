@@ -3,7 +3,6 @@ import { AlertController, ModalController, ToastController } from '@ionic/angula
 import { ApiServiceProvider } from 'src/providers/api-service/api-service';
 import { EditarAlumnoPage } from '../editar-alumno/editar-alumno.page';
 import { Alumno } from '../modelo/Alumno';
-
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -162,7 +161,6 @@ export class HomePage implements OnInit {
           "", "", "", "", "", "", "", ""))
       }
     });
-
     modal.onDidDismiss().then((data) => {
       if (data['data'] != null) {
         let alumnoJSON = JSON.parse(data['data']);
